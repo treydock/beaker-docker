@@ -387,6 +387,13 @@ module Beaker
           RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
           RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
         EOF
+      when /^el-8/
+        dockerfile += <<-EOF
+          RUN yum clean all
+          RUN yum install -y sudo openssh-server openssh-clients #{Beaker::HostPrebuiltSteps::RHEL8_PACKAGES.join(' ')}
+          RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+          RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
+        EOF
       when /^el-/, /centos/, /fedora/, /redhat/, /eos/
         dockerfile += <<-EOF
           RUN yum clean all
